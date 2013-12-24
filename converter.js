@@ -1,4 +1,6 @@
-function csv2json(csvRawString, delimiter, hasHeader) {
+
+
+var csv2json = function(csvRawString, delimiter, hasHeader) {
     if (delimiter == undefined) {
         delimiter = ",";
     }
@@ -35,16 +37,18 @@ function csv2json(csvRawString, delimiter, hasHeader) {
    return json;
 }
 
-function objects2geojson(objects) {
+var objects2geojson = function(objects) {
     var geojson = {"type": "FeatureCollection", "features": []};
     var keywords = ["lat", "lng"]
 
 
     objects.forEach(function(item) {
         var feature = {};
-        feature["type"] = "Point";
-        feature["coordinates"] = [parseFloat(item["lng"]), parseFloat(item["lat"])];
-        feature["properties"] = {};
+        feature.type = "Feature";
+        feature.geometry = {};
+        feature.geometry.type = "Point";
+        feature.geometry.coordinates = [parseFloat(item["lng"]), parseFloat(item["lat"])];
+        feature.properties = {};
       
         Object.keys(item).forEach(function(key) {
             if (keywords.indexOf(key) == -1) {
@@ -57,11 +61,14 @@ function objects2geojson(objects) {
     return geojson;
 }
 
-function csv2geojson(csvRawString, delimiter, hasHeader) {
+var csv2geojson = function(csvRawString, delimiter, hasHeader) {
 
     var objects = csv2json(csvRawString, delimiter, hasHeader)
+
     return objects2geojson(objects);
 
 }
 
-
+exports.csv2json = csv2json;
+exports.objects2geojson = objects2geojson;
+exports.csv2geojson = csv2geojson;
